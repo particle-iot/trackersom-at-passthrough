@@ -11,7 +11,7 @@ static Ring_Buffer at_tx_buffer;
 // scanmode
 //   parameter 1 - mode     : 0 = Automatic, 1 = GSM only, 3 = LTE only
 //   parameter 2 - effect   : 0 = Take effect after UE reboots, 1 = Take effect immediately
-static char cmd1[] = "AT+QCFG=\"nwscanmode\",1,1\r\n";
+static char cmd1[] = "AT+QCFG=\"nwscanmode\",0,1\r\n";
 
 // iotopmode
 //   parameter 1    : 0 = LTE CAT-M1 only, 1 = LTE CAT-NB1 only, 2 = LTE CAT-M1 and CAT-NB1
@@ -28,6 +28,7 @@ void setup() {
     digitalWrite(BGPWR, LOW);
     digitalWrite(BGRST, LOW);
     HAL_Delay_Milliseconds(100);
+    Serial.println("Powered on BG96");
 
 #if defined(MODEM_DEBUG)
     // Read Quectel modem status
@@ -47,17 +48,19 @@ void setup() {
 
     HAL_USART_Init(HAL_USART_SERIAL2, &at_rx_buffer, &at_tx_buffer);
     HAL_USART_BeginConfig(HAL_USART_SERIAL2, 115200, SERIAL_FLOW_CONTROL_RTS_CTS | SERIAL_8N1, 0);
+    Serial.println("set serial interface up with modem");
 
     // Send scanmode command to the modem
     int i;
     delay(5000);
     for (i=0; i<strlen((const char*) cmd1); i++)
         HAL_USART_Write_Data(HAL_USART_SERIAL2, cmd1[i]);
-
+    Serial.println("sent cmd1 parameters");
     // Send iotopmode command to the modem
     delay(1000);
     for (i=0; i<strlen((const char*) cmd2); i++)
         HAL_USART_Write_Data(HAL_USART_SERIAL2, cmd2[i]);
+    Serial.println("sent cmd2 parameters");
 }
 
 void loop() {

@@ -4,6 +4,42 @@ Tracker SoM AT Command passthrough firmware source
 
 Just compile and flash onto your Tracker SoM and test before sending to the certification lab
 
+### Connect the DUT to a PC's USB port to see the outputs 
+
+```
+RDY
+  AT+QCFG="nwscanmode",0,1
+
+  OK
+
+  +PACSP0
+
+  APP RDY
+  AT+QCFG="iotopmode",2,1
+
+  OK
+```
+
+You can also send commands via the USB port using a serial tool, for example, sending AT+ICCID to see the SIM card ID to check if the ‘white’ SIM card is functioning.
+
+```
+  AT+ICCID
+
+  +ICCID: 89014103272880433046
+
+  OK
+```
+
+This command AT+COPS? shows which operator the DUT is connected (a China Mobile SIM was used here)
+
+```
+  AT+COPS?
+
+  +COPS: 0,0,"CHINA MOBILE",3
+
+  OK
+```
+
 #### ```/src``` folder:  
 This is the source folder that contains the firmware files for your project. It should *not* be renamed. 
 Anything that is in this folder when you compile your project will be sent to our compile service and compiled into a firmware binary for the Particle device that you have targeted.
